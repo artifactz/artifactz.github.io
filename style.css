@@ -1,0 +1,59 @@
+body {
+    font-family: 'OpenSansLight', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #333333;
+    color: #fff;
+}
+
+h1 {
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    font-size: 40px;
+    font-weight: normal;
+    text-align: center;
+    text-shadow: 0 0 12px rgba(255, 239, 98, 0.4);
+}
+
+a.header {
+    text-decoration-line: none;
+    color: #ffef62;
+}
+
+.subtitle {
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    font-size: 17px;
+    text-shadow: 0 0 5px rgba(255, 239, 98, 0.4);
+    color: #ffef62;
+}
+
+h2 {
+    text-transform: uppercase;
+    font-size: 36px;
+    margin: 64px 0px 0px 0px;
+}
+
+.wrapper {
+    width: 972px;
+    margin: 0 auto;
+    display: block;
+}
+
+a {
+    color: #61d855;
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+}
+
+a:hover {
+    text-decoration-style: solid;
+}
+
+a:active {
+    color: #fff;
+}
+
+hr.footsep {
+    border-top: 1px dashed #222222;
+    border-bottom: none;
+    border-right: none;
+    border-left: none;
+    margin-top: 42px;
+}

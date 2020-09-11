@@ -78,7 +78,7 @@ hr.footsep {
 .modal-box {
     background-color: #666;
     position: fixed;
-    width: 972px;
+    width: 450px;
     bottom: 50%;
     left: 50%;
     transform: translate(-50%, 50%);

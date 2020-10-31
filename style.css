@@ -1,6 +1,10 @@
 body {
     font-family: 'OpenSansLight', "Helvetica Neue", Helvetica, Arial, sans-serif;
     background-color: #333333;
+    background-image: url("media/background.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
     color: #fff;
 }
 

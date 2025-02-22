@@ -127,6 +127,12 @@ hr.formsep {
     animation-duration: 0.4s;
 }
 
+@media (max-width: 600px) {
+    .modal-box {
+        width: 90%;
+    }
+}
+
 .modal-close {
     color: #aaa;
     float: right;

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<header>
+  <h1>eyeGuide</h1>
+</header>
+
+<div class="modal-box">
+
+<form id="upload-form">
+  Select pdf file to process
+  <hr class="formsep">
+  <input id="file-input" type="file" name="file" style="display:block" accept=".pdf">
+  <table style="border-collapse: collapse">
+    <tr>
+      <td><input type="submit" value="Go!"></td>
+      <td style="padding-left: 0.15em;">
+        <img id="form-spinner" src="media/spinner.gif" style="display: none; height: 1em;">
+        <img id="form-done" src="media/done.png" style="display: none; height: 1em;">
+      </td>
+    </tr>
+  </table>
+</form>
+
+</div>
+</div>
+
+<script>
+document.getElementById("file-input").addEventListener("change", async function(event) {
+  document.getElementById("form-done").style.display = "none";
+});
+
+document.getElementById("upload-form").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  let formData = new FormData();
+  let fileInput = document.getElementById("file-input");
+  if (fileInput.files.length === 0) {
+    alert("Please select a file");
+    return;
+  }
+
+  let spinner = document.getElementById("form-spinner");
+  spinner.style.display = "block";
+
+  let uploadFile = fileInput.files[0];
+  formData.append("file", uploadFile);
+
+  let response = await fetch("https://europe-west10-eye-guide.cloudfunctions.net/pdf_proxy", {
+    method: "POST",
+    body: formData
+  });
+
+  if (response.ok) {
+    let blob = await response.blob();
+    let downloadFileName = uploadFile.name.slice(0, -4) + " (eyeGuide).pdf";
+    let downloadLink = document.createElement("a");
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = downloadFileName;
+    downloadLink.click();
+  } else {
+    alert("Error processing the file");
+  }
+
+  spinner.style.display = "none";
+  document.getElementById("form-done").style.display = "block";
+});
+</script>
+
+
+</body>
+</html>

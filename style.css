@@ -16,8 +16,9 @@ h1 {
     font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
     font-size: 40px;
     font-weight: normal;
+    color: #ffef62;
     text-align: center;
-    text-shadow: 0 0 12px rgba(255, 239, 98, 0.4);
+    text-shadow: 0 0 12px rgba(255, 219, 98, 0.35);
 }
 
 a.header {
@@ -28,8 +29,10 @@ a.header {
 .subtitle {
     font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
     font-size: 17px;
-    text-shadow: 0 0 5px rgba(255, 239, 98, 0.4);
+    text-shadow: 0 0 5px rgba(255, 219, 98, 0.35);
     color: #ffef62;
+    text-align: right;
+    margin: -1em 0em 5em 0em;
 }
 
 h2 {
@@ -74,6 +77,14 @@ hr.footsep-end {
     border-left: none;
     margin-top: 2px;
     margin-bottom: 10px;
+}
+
+hr.formsep {
+    border: 1px solid #999;
+    border-bottom: none;
+    border-right: none;
+    border-left: none;
+    margin-top: 1px;
 }
 
 .footer {
@@ -144,9 +155,14 @@ a:hover {
 }
 
 .mediabox {
-  background-color: #222222;
-  margin-top: 1rem;
-  box-shadow: -1rem 0 3rem #000;
+    background-color: #222222;
+    margin-top: 1rem;
+    box-shadow: -1rem 0 3rem #000;
+}
+
+.mediabox-bright {
+    background-color: #333333;
+    padding: 15px;
 }
 
 @-webkit-keyframes slideIn {
@@ -170,22 +186,22 @@ a:hover {
 }
 
 .card-container {
-  margin: 40px 0 60px 0;
-  height: 300px;
-  width: 600px;
-  display: flex;
+    margin-top: 40px;
+    height: 300px;
+    width: 600px;
+    display: flex;
 }
 
 .card {
-  display: flex;
-  height: 273px;
-  width: 490px;
-  padding: 10px;
-  background-color: #222222;
-  border-radius: 10px;
-  transition: 0.4s ease-out;
-  position: relative;
-  left: 0px;
+    display: flex;
+    height: 273px;
+    width: 490px;
+    padding: 10px;
+    background-color: #222222;
+    border-radius: 10px;
+    transition: 0.4s ease-out;
+    position: relative;
+    left: 0px;
 }
 
 .card:not(:first-child) {
@@ -193,12 +209,21 @@ a:hover {
 }
 
 .card:hover {
-  transform: translateY(-20px);
-  transition: 0.4s ease-out;
+    transform: translateY(-20px);
+    transition: 0.4s ease-out;
 }
 
 .card:hover ~ .card {
-  position: relative;
-  left: 440px;
-  transition: 0.4s ease-out;
+    position: relative;
+    left: 440px;
+    transition: 0.4s ease-out;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    padding: 0;
+    margin: 0;
 }

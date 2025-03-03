@@ -44,7 +44,7 @@
       </td>
     </tr>
   </table>
-  <input type="submit" class="restart-buttom" value="Select another file">
+  <input type="submit" class="restart-button" value="Select another file">
 </form>
 
 </div>
@@ -101,11 +101,13 @@ document.getElementById("upload-form").addEventListener("submit", async function
   result.style.height = height;
   spinner.style.display = "none";
   result.style.display = "block";
-
   status.innerHTML = "Completed " + uploadFile.name;
 });
 
 
+/**
+ * Restart button.
+ */
 document.getElementById("upload-result-form").addEventListener("submit", async function(event) {
   event.preventDefault();
 
@@ -114,6 +116,7 @@ document.getElementById("upload-result-form").addEventListener("submit", async f
   document.getElementById("file-input").value = null;
   result.style.display = "none";
   form.style.display = "block";
+  status.innerHTML = "Select pdf file";
 });
 </script>
 

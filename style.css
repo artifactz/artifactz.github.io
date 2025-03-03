@@ -288,7 +288,7 @@ input[type="submit"]:hover, input::file-selector-button:hover {
     width: 100%;
 }
 
-.restart-buttom {
+.restart-button {
     position: absolute;
     bottom: 20px;
 }

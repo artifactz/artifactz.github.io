@@ -9,6 +9,8 @@
 
 <body>
 
+<script src="https://cdn.jsdelivr.net/npm/msgpackr@1.11.0/dist/index.min.js"></script>
+
 <div class="wrapper">
 
 <header>
@@ -17,29 +19,38 @@
 
 <div class="modal-box">
 
+<div id="status">Select pdf file</div>
+<hr class="formsep">
+
 <form id="upload-form">
-  Select pdf file to process
-  <hr class="formsep">
+  <div style="height: 1em"></div>
   <input id="file-input" type="file" name="file" style="display:block" accept=".pdf">
-  <table style="border-collapse: collapse">
+  <div style="height: 1em"></div>
+  <div class="disclaimer">Your document is processed by Google servers in Germany, EU. We do not store the document. We do store the request metadata of your browser (IP address) and the font names of your document.</div>
+  <div style="height: 1em"></div>
+  <input type="submit" value="Accept">
+</form>
+
+<div id="upload-spinner" style="display: none">
+  <img class="loading-spinner" src="media/spinner.gif">
+</div>
+
+<form id="upload-result-form" style="display: none">
+  <table>
     <tr>
-      <td><input type="submit" value="Go!"></td>
-      <td style="padding-left: 0.15em;">
-        <img id="form-spinner" src="media/spinner.gif" style="display: none; height: 1em;">
-        <img id="form-done" src="media/done.png" style="display: none; height: 1em;">
+      <td><img style="height: 3em" src="media/done.png"></td>
+      <td style="padding-left: 1em">
+        <div id="result-text"></div>
       </td>
     </tr>
   </table>
+  <input type="submit" class="restart-buttom" value="Select another file">
 </form>
 
 </div>
 </div>
 
 <script>
-document.getElementById("file-input").addEventListener("change", async function(event) {
-  document.getElementById("form-done").style.display = "none";
-});
-
 document.getElementById("upload-form").addEventListener("submit", async function(event) {
   event.preventDefault();
 
@@ -50,10 +61,18 @@ document.getElementById("upload-form").addEventListener("submit", async function
     return;
   }
 
-  let spinner = document.getElementById("form-spinner");
+  let form = document.getElementById("upload-form");
+  let spinner = document.getElementById("upload-spinner");
+  let result = document.getElementById("upload-result-form");
+  let status = document.getElementById("status");
+  let height = form.clientHeight + "px";
+
+  spinner.style.height = height;
+  form.style.display = "none";
   spinner.style.display = "block";
 
   let uploadFile = fileInput.files[0];
+  status.innerHTML = "Processing " + uploadFile.name;
   formData.append("file", uploadFile);
 
   let response = await fetch("https://europe-west10-eye-guide.cloudfunctions.net/pdf_proxy", {
@@ -62,18 +81,39 @@ document.getElementById("upload-form").addEventListener("submit", async function
   });
 
   if (response.ok) {
-    let blob = await response.blob();
+    let decoder = new msgpackr.Decoder();
+    let msg = decoder.decode(new Uint8Array(await response.arrayBuffer()));
+
+    let metadataSuccessRatio = msg.get("metadata").get("success_ratio");
+    document.getElementById("result-text").innerHTML = "Word coverage: " + (metadataSuccessRatio * 100).toFixed(0) + "%";
+
+    let blob = new Blob([msg.get("pdf")], { type: "application/pdf" });
     let downloadFileName = uploadFile.name.slice(0, -4) + " (eyeGuide).pdf";
     let downloadLink = document.createElement("a");
     downloadLink.href = URL.createObjectURL(blob);
     downloadLink.download = downloadFileName;
     downloadLink.click();
+
   } else {
     alert("Error processing the file");
   }
 
+  result.style.height = height;
   spinner.style.display = "none";
-  document.getElementById("form-done").style.display = "block";
+  result.style.display = "block";
+
+  status.innerHTML = "Completed " + uploadFile.name;
+});
+
+
+document.getElementById("upload-result-form").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  let form = document.getElementById("upload-form");
+  let result = document.getElementById("upload-result-form");
+  document.getElementById("file-input").value = null;
+  result.style.display = "none";
+  form.style.display = "block";
 });
 </script>
 

@@ -241,6 +241,59 @@ td {
     margin: 0;
 }
 
+input[type="file"] {
+    border: 0.9px dashed rgba(0, 0, 0, 0.3);
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.07));
+    padding: 0.5em;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+input[type="file"]:hover {
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.085));
+}
+
+input[type="submit"], input::file-selector-button {
+    color: white;
+    background-color: #333333;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    padding: 0.4em 0.5em 0.3em 0.5em;
+    margin-right: 0.5em;
+}
+
+input[type="submit"]:hover, input::file-selector-button:hover {
+    color: #fffbd7;
+    background-color: #3b3b3b;
+    border: 1px solid rgba(0.1, 0.1, 0.1, 0.5);
+}
+
+.disclaimer {
+    opacity: 0.69;
+    font-size: small;
+}
+
+.loading-spinner {
+    height: 6.5em;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.667;
+}
+
+#status {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.restart-buttom {
+    position: absolute;
+    bottom: 20px;
+}
+
+
 /* Mobile */
 
 @media (max-width: 600px) {

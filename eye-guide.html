@@ -114,12 +114,10 @@ document.getElementById("upload-form").addEventListener("submit", async function
 document.getElementById("upload-result-form").addEventListener("submit", async function(event) {
   event.preventDefault();
 
-  let form = document.getElementById("upload-form");
-  let result = document.getElementById("upload-result-form");
   document.getElementById("file-input").value = null;
-  result.style.display = "none";
-  form.style.display = "block";
-  status.innerHTML = "Select pdf file";
+  document.getElementById("upload-result-form").style.display = "none";
+  document.getElementById("upload-form").style.display = "block";
+  document.getElementById("status").innerHTML = "Select pdf file";
 });
 
 function updateResult(metadata) {

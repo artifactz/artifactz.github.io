@@ -38,7 +38,11 @@
 <form id="upload-result-form" style="display: none">
   <table>
     <tr>
-      <td><img style="height: 3em" src="media/done.png"></td>
+      <td>
+        <img id="result-icon-ok" style="height: 3em; display: none;" src="media/done.png">
+        <img id="result-icon-warn" style="height: 3em; display: none;" src="media/warning.png">
+        <img id="result-icon-err" style="height: 3em; display: none;" src="media/error.png">
+      </td>
       <td style="padding-left: 1em">
         <div id="result-text"></div>
       </td>
@@ -84,8 +88,7 @@ document.getElementById("upload-form").addEventListener("submit", async function
     let decoder = new msgpackr.Decoder();
     let msg = decoder.decode(new Uint8Array(await response.arrayBuffer()));
 
-    let metadataSuccessRatio = msg.get("metadata").get("success_ratio");
-    document.getElementById("result-text").innerHTML = "Word coverage: " + (metadataSuccessRatio * 100).toFixed(0) + "%";
+    updateResult(msg.get("metadata"));
 
     let blob = new Blob([msg.get("pdf")], { type: "application/pdf" });
     let downloadFileName = uploadFile.name.slice(0, -4) + " (eyeGuide).pdf";
@@ -95,7 +98,7 @@ document.getElementById("upload-form").addEventListener("submit", async function
     downloadLink.click();
 
   } else {
-    alert("Error processing the file");
+    updateResult(null);
   }
 
   result.style.height = height;
@@ -118,6 +121,50 @@ document.getElementById("upload-result-form").addEventListener("submit", async f
   form.style.display = "block";
   status.innerHTML = "Select pdf file";
 });
+
+function updateResult(metadata) {
+  let resultText = document.getElementById("result-text");
+  if (!metadata) {
+    updateResultIcon("error");
+    resultText.innerHTML = "Error processing the file";
+  } else {
+    let summary = metadata.get("summary");
+    let successRatio = metadata.get("success_ratio");
+    let text = "";
+    if (metadata.get("has_encrypted_fonts")) {
+      text = (
+        (successRatio < 0.5) ?
+        "<p>Your uploaded document has encrypted fonts. There's nothing we can do. Sorry!</p>" :
+        "<p>Your uploaded document has encrypted fonts. We did our best, but there might be missing sections. Sorry!</p>"
+      );
+    } else {
+      text = (
+        (successRatio < 0.5) ?
+        "<p>There might be missing sections due to font (licensing) issues. We're on it!</p>" :
+        "<p>Your document is now easier to read. 🚀</p>"
+      );
+    }
+    text += "<p>Word coverage: " + (successRatio * 100).toFixed(0) + "%</p>"
+    resultText.innerHTML = text;
+    updateResultIcon(summary);
+  }
+}
+
+function updateResultIcon(status) {
+  let icoOK = document.getElementById("result-icon-ok");
+  let icoWarn = document.getElementById("result-icon-warn");
+  let icoErr = document.getElementById("result-icon-err");
+  icoOK.style.display = "none";
+  icoWarn.style.display = "none";
+  icoErr.style.display = "none";
+  if (status == "ok") {
+    icoOK.style.display = "block";
+  } else if (status == "warning") {
+    icoWarn.style.display = "block";
+  } else {
+    icoErr.style.display = "block";
+  }
+}
 </script>
 
 

@@ -129,6 +129,9 @@ hr.formsep {
 }
 
 .modal-close {
+    position: absolute;
+    top: 6px;
+    right: 12px;
     color: #aaa;
     float: right;
     font-size: 28px;
@@ -136,9 +139,9 @@ hr.formsep {
 }
 
 .modal-close:hover, .modal-close:focus {
-    color: black;
+    color: #fff;
     text-decoration: none;
-    cursor: pointer;
+    cursor: default;
 }
 
 a.addr {

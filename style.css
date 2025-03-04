@@ -133,7 +133,6 @@ hr.formsep {
     top: 6px;
     right: 12px;
     color: #aaa;
-    float: right;
     font-size: 28px;
     font-weight: bold;
 }
@@ -296,6 +295,13 @@ input[type="submit"]:hover, input::file-selector-button:hover {
     bottom: 20px;
 }
 
+
+.floating-footer {
+    position: absolute;
+    bottom: 0.5em;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
 
 /* Mobile */
 

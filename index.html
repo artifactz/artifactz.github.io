@@ -94,10 +94,9 @@
   </div>
 </div>
 
+<script src="secret.js"></script>
 <script>
-  var addr = document.getElementById("address");
-  addr.innerHTML = window.atob("YnJlaG1lamEraW9AZ21haWwuY29t");
-  addr.href = window.atob("bWFpbHRvOmJyZWhtZWphK2lvQGdtYWlsLmNvbQ==");
+  makeEmailLink("address");
 
   var modal = document.getElementById("modal");
   var close = document.getElementById("close-modal");

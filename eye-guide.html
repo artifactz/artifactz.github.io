@@ -58,6 +58,7 @@
 <a href="index.html">Back to artifactz</a>
 </div>
 
+<script src="secret.js"></script>
 <script>
 document.getElementById("upload-form").addEventListener("submit", async function(event) {
   event.preventDefault();
@@ -142,12 +143,15 @@ function updateResult(metadata) {
     } else {
       text = (
         (successRatio < 0.5) ?
-        "<p>There might be missing sections due to font (licensing) issues. We're on it!</p>" :
+        "<p>There might be missing sections due to font (licensing) issues. You can submit PDF files you're having " +
+          "issues with per email to <a id=\"address\" target=\"_blank\"></a> or create an " +
+          "<a href=\"https://github.com/artifactz/eye-guide/issues\" target=\"_blank\">issue</a> at GitHub.</p>" :
         "<p>Your document is now easier to read. 🚀</p>"
       );
     }
     text += "<p>Word coverage: " + (successRatio * 100).toFixed(0) + "%</p>"
     resultText.innerHTML = text;
+    makeEmailLink("address");
     updateResultIcon(summary);
   }
 }

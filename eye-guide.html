@@ -151,7 +151,9 @@ function updateResult(metadata) {
     }
     text += "<p>Word coverage: " + (successRatio * 100).toFixed(0) + "%</p>"
     resultText.innerHTML = text;
-    makeEmailLink("address");
+    if (makeEmailLink("address")) {
+      document.getElementById("address").href += "?subject=This PDF does not work in eyeGuide";
+    };
     updateResultIcon(summary);
   }
 }

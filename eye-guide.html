@@ -24,11 +24,11 @@
 
 <form id="upload-form">
   <div style="height: 1em"></div>
-  <input id="file-input" type="file" name="file" style="display:block" accept=".pdf">
+  <input id="file-input" type="file" name="file" class="file" style="display:block" accept=".pdf">
   <div style="height: 1em"></div>
-  <div class="disclaimer">Your document is processed by Google servers in Germany, EU. We do not store the document. Google Cloud automatically logs request metadata, including IP addresses and timestamps, for security and operational purposes.</div>
+  <div id="disclaimer" class="disclaimer">Your document is processed by Google servers in Germany, EU. We do not store the document. Google Cloud automatically logs request metadata, including IP addresses and timestamps, for security and operational purposes.</div>
   <div style="height: 1em"></div>
-  <input type="submit" value="Accept">
+  <input id="submit" type="submit" value="Accept" disabled>
 </form>
 
 <div id="upload-spinner" style="display: none">
@@ -62,11 +62,48 @@
 
 <script src="secret.js"></script>
 <script>
+
+var disclaimerText = null;
+
 // Only show footer on regular website
 if (!window.matchMedia("(display-mode: standalone)").matches && !window.navigator.standalone) {
   document.getElementById("footer").style.display = "block";
 }
 
+
+/**
+ * Selected a file.
+ */
+document.getElementById("file-input").addEventListener("change", async function(event) {
+  const maxSize = 15e6;
+
+  let fileInput = document.getElementById("file-input");
+  let disclaimer = document.getElementById("disclaimer");
+  let submit = document.getElementById("submit");
+  fileInput.classList.remove("file-ok", "file-nok", "file");
+  disclaimerText = disclaimerText || disclaimer.innerHTML;
+
+  if (fileInput.files.length > 0 && fileInput.files[0].size > maxSize) {
+    let height = disclaimer.clientHeight + "px";
+    disclaimer.innerHTML = "Only files up to 15 MB in size are supported at the moment.";
+    disclaimer.style.height = height;
+    fileInput.classList.add("file-nok");
+    submit.disabled = true;
+  } else if (fileInput.files.length > 0) {
+    disclaimer.innerHTML = disclaimerText;
+    fileInput.classList.add("file-ok");
+    submit.disabled = false;
+  } else {
+    disclaimer.innerHTML = disclaimerText;
+    fileInput.classList.add("file");
+    submit.disabled = true;
+  }
+});
+
+
+/**
+ * Clicked "Accept" button.
+ */
 document.getElementById("upload-form").addEventListener("submit", async function(event) {
   event.preventDefault();
 
@@ -110,7 +147,8 @@ document.getElementById("upload-form").addEventListener("submit", async function
     downloadLink.click();
 
   } else {
-    updateResult(null);
+    let data = await response.json();
+    updateResult(data ? new Map(Object.entries(data)) : null);
   }
 
   result.style.height = height;
@@ -121,7 +159,7 @@ document.getElementById("upload-form").addEventListener("submit", async function
 
 
 /**
- * Restart button.
+ * Clicked "Select another file" button.
  */
 document.getElementById("upload-result-form").addEventListener("submit", async function(event) {
   event.preventDefault();
@@ -132,11 +170,18 @@ document.getElementById("upload-result-form").addEventListener("submit", async f
   document.getElementById("status").innerHTML = "Select pdf file";
 });
 
+
+/**
+ * Sets result text and icon based on metadata.
+ */
 function updateResult(metadata) {
   let resultText = document.getElementById("result-text");
   if (!metadata) {
     updateResultIcon("error");
     resultText.innerHTML = "Error processing the file";
+  } else if (metadata.get("error")) {
+    updateResultIcon("error");
+    resultText.innerHTML = metadata.get("error");
   } else {
     let summary = metadata.get("summary");
     let successRatio = metadata.get("success_ratio");

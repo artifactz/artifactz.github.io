@@ -133,6 +133,7 @@ document.getElementById("upload-form").addEventListener("submit", async function
     body: formData
   });
 
+  // Success
   if (response.ok) {
     let decoder = new msgpackr.Decoder();
     let msg = decoder.decode(new Uint8Array(await response.arrayBuffer()));
@@ -146,8 +147,17 @@ document.getElementById("upload-form").addEventListener("submit", async function
     downloadLink.download = downloadFileName;
     downloadLink.click();
 
+  // Fail
+  } else if (response.status == 503) {
+    updateResult(new Map([["error", "File too large"]]));
   } else {
-    let data = await response.json();
+    const contentType = response.headers.get('Content-Type').toLowerCase();
+    let data = null;
+    if (contentType == "text/plain") {
+      data = {"error": await response.text()};
+    } else if (contentType == "text/plain") {
+      data = await response.json();
+    }
     updateResult(data ? new Map(Object.entries(data)) : null);
   }
 
@@ -181,7 +191,7 @@ function updateResult(metadata) {
     resultText.innerHTML = "Error processing the file";
   } else if (metadata.get("error")) {
     updateResultIcon("error");
-    resultText.innerHTML = metadata.get("error");
+    resultText.innerHTML = metadata.get("error") + " :(";
   } else {
     let summary = metadata.get("summary");
     let successRatio = metadata.get("success_ratio");

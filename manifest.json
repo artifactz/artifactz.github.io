@@ -1,19 +1,19 @@
 {
-  "name": "eyeGuide PDF Emphasizer",
-  "short_name": "eyeGuide",
+  "name": "Read for Speed PDF Emphasizer",
+  "short_name": "Read for Speed",
   "description": "Bold the first half of words in PDFs for better readability.",
-  "start_url": "/eye-guide.html",
+  "start_url": "/read-for-speed.html",
   "display": "standalone",
   "background_color": "#333333",
   "theme_color": "#ffef62",
   "icons": [
     {
-      "src": "/media/eye-guide-icon-192.png",
+      "src": "/media/read-for-speed-icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/media/eye-guide-icon-512.png",
+      "src": "/media/read-for-speed-icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }

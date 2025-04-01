@@ -14,7 +14,7 @@
 <div class="wrapper">
 
 <header>
-  <h1>eyeGuide</h1>
+  <h1>Read for Speed</h1>
 </header>
 
 <div class="modal-box">
@@ -56,7 +56,7 @@
 
 <div id="footer" class="floating-footer" style="display: none;">
 <div style="text-align: center;">
-  <a href="eye-guide-pwa.html">Add to home screen</a>&emsp;<a href="index.html">Back to artifactz</a>
+  <a href="read-for-speed-pwa.html">Add to home screen</a>&emsp;<a href="index.html">Back to artifactz</a>
 </div>
 </div>
 
@@ -141,7 +141,7 @@ document.getElementById("upload-form").addEventListener("submit", async function
     updateResult(msg.get("metadata"));
 
     let blob = new Blob([msg.get("pdf")], { type: "application/pdf" });
-    let downloadFileName = uploadFile.name.slice(0, -4) + " (eyeGuide).pdf";
+    let downloadFileName = uploadFile.name.slice(0, -4) + " (Read for Speed).pdf";
     let downloadLink = document.createElement("a");
     downloadLink.href = URL.createObjectURL(blob);
     downloadLink.download = downloadFileName;
@@ -207,14 +207,14 @@ function updateResult(metadata) {
         (successRatio < 0.5) ?
         "<p>There might be missing sections due to font (licensing) issues. You can submit PDF files you're having " +
           "issues with per email to <a id=\"address\" target=\"_blank\"></a> or create an " +
-          "<a href=\"https://github.com/artifactz/eye-guide/issues\" target=\"_blank\">issue</a> at GitHub.</p>" :
+          "<a href=\"https://github.com/artifactz/read-for-speed/issues\" target=\"_blank\">issue</a> at GitHub.</p>" :
         "<p>Your document is now easier to read. 🚀</p>"
       );
     }
     text += "<p>Word coverage: " + (successRatio * 100).toFixed(0) + "%</p>"
     resultText.innerHTML = text;
     if (makeEmailLink("address")) {
-      document.getElementById("address").href += "?subject=This PDF does not work in eyeGuide";
+      document.getElementById("address").href += "?subject=This PDF does not work in Read for Speed";
     };
     updateResultIcon(summary);
   }

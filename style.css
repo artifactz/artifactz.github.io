@@ -128,6 +128,10 @@ hr.formsep {
     animation-duration: 0.4s;
 }
 
+.less-shadow {
+    box-shadow: 0 0 30px 15px rgba(0, 0, 0, 0.333);
+}
+
 .modal-close {
     position: absolute;
     top: 6px;

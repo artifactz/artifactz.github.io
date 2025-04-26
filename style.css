@@ -52,6 +52,11 @@ a {
     color: #61d855;
     text-decoration-line: underline;
     text-decoration-style: dotted;
+    cursor: pointer;
+}
+
+.link-color {
+    color: #61d855;
 }
 
 a:hover {
@@ -292,6 +297,13 @@ input[type="submit"]:disabled, input[type="submit"][disabled] {
 .disclaimer {
     opacity: 0.69;
     font-size: small;
+}
+
+.report {
+    font-size: small;
+    position: absolute;
+    bottom: 2em;
+    right: 2em;
 }
 
 .loading-spinner {

@@ -29,13 +29,14 @@
   <div id="disclaimer" class="disclaimer">Your document is processed by Google servers in Germany, EU. We do not store the document. Google Cloud automatically logs request metadata, including IP addresses and timestamps, for security and operational purposes.</div>
   <div style="height: 1em"></div>
   <input id="submit" type="submit" value="Accept" disabled>
+  <a class="report report-event">Report a problem</a>
 </form>
 
 <div id="upload-spinner" style="display: none">
   <img class="loading-spinner" src="media/spinner.gif">
 </div>
 
-<form id="upload-result-form" style="display: none">
+<form id="result-form" style="display: none">
   <table>
     <tr>
       <td>
@@ -49,6 +50,21 @@
     </tr>
   </table>
   <input type="submit" class="restart-button" value="Select another file">
+  <a class="report report-event">Report a problem</a>
+</form>
+
+<form id="report-form" style="display: none">
+  <div style="height: 1em"></div>
+  <p>
+    You can submit PDF files you're having issues with per email to
+    <a id="address" target="_blank"></a> or create an
+    <a href="https://github.com/artifactz/read-for-speed/issues" target="_blank">issue</a>
+    at GitHub.
+  </p>
+  <div style="height: 4.35em"></div>
+  <div class="link-color report" style="width: 100%; text-align: right;">
+    ↩ <a class="" style="padding-left: 0.5em;" id="dismiss">Return</a>
+  </div>
 </form>
 
 </div>
@@ -64,11 +80,19 @@
 <script>
 
 var disclaimerText = null;
+var returnElement = null;
+var returnTitle = null;
+
 
 // Only show footer on regular website
 if (!window.matchMedia("(display-mode: standalone)").matches && !window.navigator.standalone) {
   document.getElementById("footer").style.display = "block";
 }
+
+// Set up email address link
+if (makeEmailLink("address")) {
+  document.getElementById("address").href += "?subject=This PDF does not work in Read for Speed";
+};
 
 
 /**
@@ -116,7 +140,7 @@ document.getElementById("upload-form").addEventListener("submit", async function
 
   let form = document.getElementById("upload-form");
   let spinner = document.getElementById("upload-spinner");
-  let result = document.getElementById("upload-result-form");
+  let result = document.getElementById("result-form");
   let status = document.getElementById("status");
   let height = form.clientHeight + "px";
 
@@ -169,13 +193,52 @@ document.getElementById("upload-form").addEventListener("submit", async function
 
 
 /**
+ * Clicked "Report" button.
+ */
+document.querySelectorAll('.report-event').forEach(element => {
+  element.addEventListener("click", async function(event) {
+    event.preventDefault();
+
+    let upload = document.getElementById("upload-form");
+    let result = document.getElementById("result-form");
+    let status = document.getElementById("status");
+    let report = document.getElementById("report-form");
+
+    returnElement = (upload.style.display == "none") ? result : upload;
+    let height = returnElement.clientHeight + "px";
+    returnTitle = status.innerHTML;
+    report.style.height = height;
+    upload.style.display = "none";
+    result.style.display = "none";
+    report.style.display = "block";
+    status.innerHTML = "Report a problem";
+  });
+});
+
+
+/**
+ * Clicked "Return" button.
+ */
+document.getElementById("dismiss").addEventListener("click", async function(event) {
+  event.preventDefault();
+  const report = document.getElementById("report-form");
+  report.style.display = "none";
+  returnElement.style.display = "block";
+  document.getElementById("status").innerHTML = returnTitle;
+});
+
+
+/**
  * Clicked "Select another file" button.
  */
-document.getElementById("upload-result-form").addEventListener("submit", async function(event) {
+document.getElementById("result-form").addEventListener("submit", async function(event) {
   event.preventDefault();
 
-  document.getElementById("file-input").value = null;
-  document.getElementById("upload-result-form").style.display = "none";
+  const fileInput = document.getElementById("file-input");
+  fileInput.value = null;
+  fileInput.classList.remove("file-ok", "file-nok", "file");
+  fileInput.classList.add("file");
+  document.getElementById("result-form").style.display = "none";
   document.getElementById("upload-form").style.display = "block";
   document.getElementById("status").innerHTML = "Select pdf file";
 });
@@ -195,27 +258,30 @@ function updateResult(metadata) {
   } else {
     let summary = metadata.get("summary");
     let successRatio = metadata.get("success_ratio");
+    const success = "<p>Successfully created overlay for " + (successRatio * 100).toFixed(0) + "% of words. 🚀</p>";
     let text = "";
     if (metadata.get("has_encrypted_fonts")) {
-      text = (
+      text = "<p>Your uploaded document contains encrypted fonts.</p>";
+
+      const estimated_primary_font = metadata.get("estimated_primary_font");
+      if (estimated_primary_font) {
+        text += "<p>🤖 Our robot thinks it's " + estimated_primary_font + ".</p>";
+      }
+
+      text += (
         (successRatio < 0.5) ?
-        "<p>Your uploaded document has encrypted fonts. There's nothing we can do. Sorry!</p>" :
-        "<p>Your uploaded document has encrypted fonts. We did our best, but there might be missing sections. Sorry!</p>"
+        "<p>There might be missing sections (Coverage: " + (successRatio * 100).toFixed(0) + "%).</p>" :
+        success
       );
     } else {
       text = (
         (successRatio < 0.5) ?
-        "<p>There might be missing sections due to font (licensing) issues. You can submit PDF files you're having " +
-          "issues with per email to <a id=\"address\" target=\"_blank\"></a> or create an " +
-          "<a href=\"https://github.com/artifactz/read-for-speed/issues\" target=\"_blank\">issue</a> at GitHub.</p>" :
-        "<p>Your document is now easier to read. 🚀</p>"
+        "<p>There might be missing sections due to font (licensing) issues (Coverage: " + (successRatio * 100).toFixed(0) + "%).</p>" :
+        success
       );
     }
-    text += "<p>Word coverage: " + (successRatio * 100).toFixed(0) + "%</p>"
+
     resultText.innerHTML = text;
-    if (makeEmailLink("address")) {
-      document.getElementById("address").href += "?subject=This PDF does not work in Read for Speed";
-    };
     updateResultIcon(summary);
   }
 }

@@ -32,8 +32,8 @@
   <a class="report report-event">Report a problem</a>
 </form>
 
-<div id="upload-spinner" style="display: none">
-  <img class="loading-spinner" src="media/spinner.gif">
+<div id="upload-animation" style="display: none">
+  <img class="loading-animation" src="media/robot-loading.gif">
 </div>
 
 <form id="result-form" style="display: none">
@@ -139,7 +139,7 @@ document.getElementById("upload-form").addEventListener("submit", async function
   }
 
   let form = document.getElementById("upload-form");
-  let spinner = document.getElementById("upload-spinner");
+  let spinner = document.getElementById("upload-animation");
   let result = document.getElementById("result-form");
   let status = document.getElementById("status");
   let height = form.clientHeight + "px";

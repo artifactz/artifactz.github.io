@@ -260,10 +260,10 @@ function updateResult(metadata) {
     let successRatio = metadata.get("success_ratio");
     const success = "<p>Successfully created overlay for " + (successRatio * 100).toFixed(0) + "% of words. 🚀</p>";
     let text = "";
-    if (metadata.get("has_encrypted_fonts")) {
+    if (metadata.get("is_primary_font_encrypted")) {
       text = "<p>Your uploaded document contains encrypted fonts.</p>";
 
-      const estimated_primary_font = metadata.get("estimated_primary_font");
+      const estimated_primary_font = metadata.get("primary_font");
       if (estimated_primary_font) {
         text += "<p>🤖 Our robot thinks it's " + estimated_primary_font + ".</p>";
       }

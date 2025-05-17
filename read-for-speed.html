@@ -260,7 +260,8 @@ function updateResult(metadata) {
     let successRatio = metadata.get("success_ratio");
     const success = "<p>Successfully created overlay for " + (successRatio * 100).toFixed(0) + "% of words. 🚀</p>";
     let text = "";
-    if (metadata.get("is_primary_font_encrypted")) {
+
+    if (metadata.get("primary_font_status") == "encrypted") {
       text = "<p>Your uploaded document contains encrypted fonts.</p>";
 
       const estimated_primary_font = metadata.get("primary_font");
@@ -272,6 +273,24 @@ function updateResult(metadata) {
         (successRatio < 0.5) ?
         "<p>There might be missing sections (Coverage: " + (successRatio * 100).toFixed(0) + "%).</p>" :
         success
+      );
+    } else if (metadata.get("primary_font_status") == "missing") {
+      const primary_font_raw = metadata.get("primary_font_raw");
+      text = (
+        primary_font_raw ?
+        "<p>Your uploaded document contains an unknown font: " + metadata.get("primary_font_raw") + "</p>" :
+        "<p>Your uploaded document contains unknown fonts.</p>"
+      );
+
+      const estimated_primary_font = metadata.get("primary_font");
+      if (estimated_primary_font) {
+        text += "<p>🤖 Our robot thinks it looks a bit like " + estimated_primary_font + ".</p>";
+      }
+
+      text += (
+        (successRatio < 0.5) ?
+        "<p>There might be missing sections (Coverage: " + (successRatio * 100).toFixed(0) + "%).</p>" :
+        "<p>Report a problem if you're unhappy with the result.</p>"
       );
     } else {
       text = (

@@ -20,12 +20,12 @@ body {
 }
 
 h1 {
-    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    font-family: Orbitron;
+    font-weight: 500;
     font-size: 40px;
-    font-weight: normal;
     color: #ffef62;
     text-align: center;
-    text-shadow: 0 0 12px rgba(255, 219, 98, 0.35);
+    text-shadow: 0 0 12px rgba(255, 219, 98, 0.25);
 }
 
 a.header {
@@ -169,6 +169,16 @@ a:hover {
 .mediabox {
     background-color: #222222;
     box-shadow: -1em 0 3em #000;
+}
+
+.mediabox-clickable {
+    transition: box-shadow 0.333s ease,
+                transform 0.333s ease;
+}
+
+.mediabox-clickable:hover {
+    box-shadow: -1em 0 3.5em -10px #000;
+    transform: scale(1.03) translateY(-10px);
 }
 
 .mediabox-bright {

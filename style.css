@@ -29,9 +29,24 @@ h1 {
     text-shadow: 0 0 12px rgba(255, 219, 98, 0.25);
 }
 
+h1 > a {
+    text-decoration-line: none;
+    color: #ffef62;
+}
+
 a.header {
     text-decoration-line: none;
     color: #ffef62;
+}
+
+a.header:hover {
+    background-color: #ffef6211;
+    text-shadow: 0 0 5px #ffef62;
+}
+
+a.header:active {
+    color: #fff;
+    text-shadow: 0 0 5px #ffef62, 0 0 3px #fff;
 }
 
 .subtitle {
